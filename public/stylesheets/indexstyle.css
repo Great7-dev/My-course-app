@@ -1,0 +1,31 @@
+body {
+  padding: 100px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: blue;
+  background-image: url("../images/The Most Beautiful Public High School in Every State in America.jpeg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  /* height: 200vh; */
+  background-attachment: fixed;
+}
+.container{
+  width: 100vw;
+  height:100vh;
+
+}
+
+a {
+  color: #00B7FF;
+}
+p{
+  color: #80471c;
+  font-size: xx-large;
+  font-weight: 800;
+  margin-top: 4rem;
+  align-content: center;
+}
+.jumbotron {
+ margin-top: 8rem;
+color:black;
+} 

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Courses</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel='stylesheet' href='/stylesheets/indexstyle.css' />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+  <style>
+    .images{
+
+    object-fit: cover;
+    }
+  </style>
+  </head>
+  <body>
+    <div class="container">
+      <p>Welcome to Great Edu University</p>
+
+      <div class="jumbotron text-center">
+          <h1><span class="fa fa-lock"></span> You can enroll here</h1>
+  
+          <h4>Login or Register with:</h4>
+  
+          <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Login</a>
+          <a href="/register" class="btn btn-default"><span class="fa fa-user"></span> Register</a>
+      </div>
+      <div class="d-flex justify-content-between flex-wrap" >
+            <% if (data.length >0){ data.forEach(data => { %>
+         
+
+          <div class="col-md-4 mb-2 d-flex py-5">
+            <div class="card card-body flex-fill p-0">
+                <img
+                  class="card-img-top images bookIcon h-100 w-100 img-fluid"
+                  src="<%= data.image %>"
+                  alt="..."
+                />
+              <div class="card-body p-2">
+                    <h5 class="fw-bolder text-center"><%= data.courses%></h5>
+                    <hr>
+                    <div class="text-justify"> 
+                    <small class="text-secondary">Course:<%= data.course%></small><br>
+                    <small class="text-secondary">Price:<%= data.price%></small><br>
+                    <small class="text-secondary">Description: <%= data.description %></small><br>
+                    <!-- <small>Date published:<%= new Date(data.datePublished).toLocaleDateString() ;  %></small> -->
+                 </div>
+              
+              </div>
+            </div>
+          </div>
+
+        
+          <!-- <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="<%= data.image %>" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div> -->
+  
+                 <% 
+           })
+         }else{ %>
+          <h2>NO COURSE TO DISPLAY</h2>
+          <% } %>
+        </div>
+      </div>
+  </div>
+  </body>
+</html>
+
