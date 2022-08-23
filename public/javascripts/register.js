@@ -1,1 +1,1 @@
-const registerpage = getElemenyByClassName()
+// const registerpage = getElemenyByClassName()

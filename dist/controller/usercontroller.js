@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsers = exports.LoginUser = exports.RegisterUser = void 0;
+exports.logOut = exports.getUsers = exports.defaultView = exports.LoginUser = exports.RegisterUser = void 0;
 const uuid_1 = require("uuid");
 const utils_1 = require("../utils/utils");
 const userModel_1 = require("../model/userModel");
@@ -65,6 +65,8 @@ async function LoginUser(req, res, next) {
         const user = await userModel_1.UserInstance.findOne({ where: { email: req.body.email } });
         const { id } = user;
         const token = (0, utils_1.generateToken)({ id });
+        res.cookie('mytoken', token, { httpOnly: true });
+        res.cookie('id', id, { httpOnly: true });
         const validUser = await bcryptjs_1.default.compare(req.body.password, user.password);
         if (!validUser) {
             res.status(401);
@@ -72,11 +74,12 @@ async function LoginUser(req, res, next) {
             });
         }
         if (validUser) {
-            res.status(200);
-            res.json({ message: "login successful",
-                token,
-                user
-            });
+            res.render('loginrefresh');
+            //    res.status(200)
+            //    res.json({message: "login successful",
+            //       token,
+            //       user   
+            //      })
         }
     }
     catch (err) {
@@ -88,6 +91,30 @@ async function LoginUser(req, res, next) {
     }
 }
 exports.LoginUser = LoginUser;
+async function defaultView(req, res, next) {
+    try {
+        const userId = req.cookies.id;
+        const record = (await userModel_1.UserInstance.findOne({
+            where: { id: userId },
+            include: [{ model: login_1.LoginInstance, as: "courses" }],
+        }));
+        const user = record.courses;
+        res.render("dashboard", { user: user });
+        // res.status(200).json({
+        //     msg:"You have successfully gotten your data",
+        //     count: record.count,
+        //     courses:{user}
+        // })
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({
+            msg: "failed to login",
+            route: "/login",
+        });
+    }
+}
+exports.defaultView = defaultView;
 async function getUsers(req, res, next) {
     try {
         const limit = req.query.limit;
@@ -112,3 +139,11 @@ async function getUsers(req, res, next) {
     }
 }
 exports.getUsers = getUsers;
+async function logOut(req, res) {
+    res.clearCookie('mytoken');
+    // res.status(200).json({
+    //     message: You have succesfully logged out
+    // })
+    res.redirect('/');
+}
+exports.logOut = logOut;

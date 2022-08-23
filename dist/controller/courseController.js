@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DeleteCourses = exports.UpdateCourses = exports.getOne = exports.getCourses = exports.Users = void 0;
+exports.getUniqueCourse = exports.DeleteCourses = exports.UpdateCourses = exports.getOne = exports.getCourses = exports.Users = void 0;
 const login_1 = require("../model/login");
 const userModel_1 = require("../model/userModel");
 const uuid_1 = require("uuid");
@@ -16,11 +16,12 @@ async function Users(req, res, next) {
             });
         }
         const record = await login_1.LoginInstance.create({ id, ...req.body, userId: verified.id });
-        res.status(201);
-        res.json({
-            message: "You have successfully enrolled your course.",
-            record
-        });
+        // res.status(201);
+        // res.json({
+        //     message:"You have successfully enrolled your course.",
+        //     record
+        // })
+        res.redirect('/users/dashboard');
     }
     catch (err) {
         console.log(err);
@@ -44,17 +45,17 @@ async function getCourses(req, res, next) {
                 },
             ],
         });
-        // res.status(200);
-        // res.json({
-        //     msg:"Here are your courses",
-        //     count:record.count,
-        //     record:record.rows
-        // })
-        res.render('index', {
-            title: "courses",
-            message: 'Here are your courses',
-            data: record.rows
+        res.status(200);
+        res.json({
+            msg: "Here are your courses",
+            count: record.count,
+            record: record.rows
         });
+        // ('index', {
+        //     title: "courses",
+        //    message:'Here are your courses',
+        //    data: record.rows
+        // })
     }
     catch (error) {
         res.status(500).json({
@@ -83,7 +84,8 @@ async function getOne(req, res, next) {
 exports.getOne = getOne;
 async function UpdateCourses(req, res, next) {
     try {
-        const { id } = req.params;
+        // const { id } = req.params
+        const id = req.params;
         const { course, description, image, price } = req.body;
         const validateResult = utils_1.updateCourseSchema.validate(req.body, utils_1.options);
         if (validateResult.error) {
@@ -91,7 +93,7 @@ async function UpdateCourses(req, res, next) {
                 Error: validateResult.error.details[0].message
             });
         }
-        const record = await login_1.LoginInstance.findOne({ where: { id } });
+        const record = await login_1.LoginInstance.findOne({ where: id });
         if (!record) {
             res.status(404).json({
                 Error: "cannot find course",
@@ -103,10 +105,11 @@ async function UpdateCourses(req, res, next) {
             image: image,
             price: price
         });
-        res.status(200).json({
-            message: 'you have successfully updated your course',
-            record: updaterecord
-        });
+        //  res.status(200).json({
+        //     message: 'you have successfully updated your course',
+        //     record: updaterecord 
+        //  })
+        res.redirect('/users/dashboard');
     }
     catch (error) {
         res.status(500).json({
@@ -126,10 +129,11 @@ async function DeleteCourses(req, res, next) {
             });
         }
         const deletedRecord = await record?.destroy();
-        res.status(200).json({
-            msg: 'Course has been deleted successfully',
-            deletedRecord
-        });
+        res.render("dashboardrefresh");
+        //    res.status(200).json({
+        //     msg: 'Course has been deleted successfully',
+        //     deletedRecord
+        //    })
     }
     catch (error) {
         res.status(500).json({
@@ -139,3 +143,21 @@ async function DeleteCourses(req, res, next) {
     }
 }
 exports.DeleteCourses = DeleteCourses;
+async function getUniqueCourse(req, res, next) {
+    try {
+        const id = req.params;
+        const record = await login_1.LoginInstance.findOne({ where: id });
+        // res.status(200).json({
+        //     msg:"Here is your course",
+        //     record
+        // })
+        res.render('editcourse', { record: record });
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: 'failed to read single course',
+            route: '/read/:id'
+        });
+    }
+}
+exports.getUniqueCourse = getUniqueCourse;

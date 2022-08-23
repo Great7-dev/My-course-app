@@ -17,11 +17,12 @@ export async function Users(req:Request |any, res:Response, next:NextFunction) {
             })
         }
         const record = await LoginInstance.create({id, ...req.body, userId:verified.id})
-        res.status(201);
-        res.json({
-            message:"You have successfully enrolled your course.",
-            record
-        })
+        // res.status(201);
+        // res.json({
+        //     message:"You have successfully enrolled your course.",
+        //     record
+        // })
+        res.redirect('/users/dashboard')
     }catch(err){
         console.log(err)
         res.status(500).json({
@@ -45,17 +46,17 @@ export async function Users(req:Request |any, res:Response, next:NextFunction) {
               },
               ],
          });
-        // res.status(200);
-        // res.json({
-        //     msg:"Here are your courses",
-        //     count:record.count,
-        //     record:record.rows
-        // })
-        res.render('index', {
-            title: "courses",
-           message:'Here are your courses',
-           data: record.rows
+        res.status(200);
+        res.json({
+            msg:"Here are your courses",
+            count:record.count,
+            record:record.rows
         })
+        // ('index', {
+        //     title: "courses",
+        //    message:'Here are your courses',
+        //    data: record.rows
+        // })
     }catch(error){
            res.status(500).json({
             msg:'failed to read all',
@@ -83,7 +84,8 @@ export async function Users(req:Request |any, res:Response, next:NextFunction) {
 
 export async function UpdateCourses(req:Request, res:Response, next:NextFunction){
     try{
-        const { id } = req.params
+        // const { id } = req.params
+        const id = req.params
         const {course,description,image,price} = req.body
         const validateResult = updateCourseSchema.validate(req.body,options)
         if(validateResult.error){
@@ -91,7 +93,7 @@ export async function UpdateCourses(req:Request, res:Response, next:NextFunction
                 Error:validateResult.error.details[0].message
             })
         }
-        const record = await LoginInstance.findOne({where:{id}})
+        const record = await LoginInstance.findOne({where: id })
         if(!record){
             res.status(404).json({
                       Error:"cannot find course",
@@ -104,10 +106,11 @@ export async function UpdateCourses(req:Request, res:Response, next:NextFunction
             image:image,
             price:price
          })
-         res.status(200).json({
-            message: 'you have successfully updated your course',
-            record: updaterecord 
-         })
+        //  res.status(200).json({
+        //     message: 'you have successfully updated your course',
+        //     record: updaterecord 
+        //  })
+        res.redirect('/users/dashboard')
     }catch(error){
            res.status(500).json({
             msg:'failed to update',
@@ -127,14 +130,33 @@ export async function DeleteCourses(req:Request, res:Response, next:NextFunction
             })
         }
        const deletedRecord = await record?.destroy();
-       res.status(200).json({
-        msg: 'Course has been deleted successfully',
-        deletedRecord
-       })
+       res.render("dashboardrefresh")
+    //    res.status(200).json({
+    //     msg: 'Course has been deleted successfully',
+    //     deletedRecord
+    //    })
     }catch(error){
            res.status(500).json({
             msg:'failed to delete',
             route: '/delete/:id'
+
+           })
+    }
+}
+
+export async function getUniqueCourse(req:Request, res:Response, next:NextFunction){
+    try{
+      const id = req.params
+      const record = await LoginInstance.findOne({where: id})
+        // res.status(200).json({
+        //     msg:"Here is your course",
+        //     record
+        // })
+        res.render('editcourse', {record:record})
+    }catch(error){
+           res.status(500).json({
+            msg:'failed to read single course',
+            route: '/read/:id'
 
            })
     }

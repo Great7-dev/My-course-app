@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stylesheets/coursereg.css">
+    <title>Register a course</title>
+</head>
+<body>
+    <div id="container">
+        <form class="form-wrap" id="signup_table" action="/users/create" method="post">
+            <div id = "signup_error" class="text-center mb-2 text-danger text-bold"></div>
+            <h1>Create Your Course</h1>
+            
+			<div class="form-group">
+                <label for="course">Course Title</label>
+				<input type="text" id="course" placeholder="Enter your course title" name="course" required>
+			</div> <!--/.form-group-->
+            
+            <div class="form-group">
+                <label for="image">Image</label>
+				<input type="text" id="image"  placeholder="Enter your image URL" name="image" required>
+			</div> <!--/.form-group-->
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" placeholder="Enter a description of the course" name="description" required>
+          </div><!--/.form-group-->
+          
+          <div class="form-group">
+              <label for="price">Price</label>
+              <input type="number" id="price"  placeholder="Enter your amount" name="price" required>
+			</div> <!--/.form-group-->
+        
+        
+        <button type="submit"  class="btn" id="signup">Create Course</button>
+        <p class="bottom-text">By Clicking the sign up button, you agree to our</p>
+        <a href="#">Terms & Conditions</a>
+        <a href="#">Privacy Policy</a>
+        </form>
+    </div>
+</body>
+</html>

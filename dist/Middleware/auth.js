@@ -10,20 +10,21 @@ const userModel_1 = require("../model/userModel");
 async function auth(req, res, next) {
     try {
         const authorization = req.headers.authorization;
-        if (!authorization) {
+        if (!authorization && !req.cookies.mytoken) {
             res.status(401);
             res.json({
                 Error: 'kindly sign in as a user'
             });
         }
         //hide part of the token 
-        const token = authorization?.slice(7, authorization.length);
+        const token = authorization?.slice(7, authorization.length) || req.cookies.mytoken;
         let verified = jsonwebtoken_1.default.verify(token, secret);
         if (!verified) {
             res.status(401);
             res.json({
                 Error: 'User not verified, you cant access this route'
             });
+            return;
         }
         const { id } = verified;
         const user = await userModel_1.UserInstance.findOne({ where: { id } });
@@ -32,15 +33,18 @@ async function auth(req, res, next) {
             res.json({
                 Error: 'user not verified'
             });
+            return;
         }
         req.user = verified;
         next();
     }
     catch (error) {
+        console.log(error);
         res.status(500);
         res.json({
             Error: "user not logged in"
         });
+        return;
     }
 }
 exports.auth = auth;

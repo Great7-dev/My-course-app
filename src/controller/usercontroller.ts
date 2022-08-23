@@ -65,6 +65,8 @@ export async function RegisterUser(req:Request, res:Response, next:NextFunction)
 
        const {id} = user
        const token = generateToken({id})
+       res.cookie('mytoken', token, {httpOnly:true})
+       res.cookie('id',id,{httpOnly:true})
        const validUser= await bcrypt.compare(req.body.password, user.password)
        if(!validUser){
         res.status(401)
@@ -72,11 +74,12 @@ export async function RegisterUser(req:Request, res:Response, next:NextFunction)
          })
        }
        if(validUser){
-       res.status(200)
-       res.json({message: "login successful",
-          token,
-          user   
-         })
+        res.render('loginrefresh')
+    //    res.status(200)
+    //    res.json({message: "login successful",
+    //       token,
+    //       user   
+    //      })
        }
     }catch(err){
         res.status(500)
@@ -87,6 +90,53 @@ export async function RegisterUser(req:Request, res:Response, next:NextFunction)
         })
     }
 
+  }
+
+  export async function defaultView(
+
+    req: Request,
+  
+    res: Response,
+  
+    next: NextFunction
+  
+  ) {
+  
+    try {
+  
+      const userId = req.cookies.id;
+  
+      const record = (await UserInstance.findOne({
+  
+        where: { id: userId },
+  
+        include: [{ model: LoginInstance, as: "courses" }],
+  
+      })) as unknown as { [key: string]: string };
+  
+  const user=record.courses
+  
+      res.render("dashboard", { user:user });
+    // res.status(200).json({
+    //     msg:"You have successfully gotten your data",
+    //     count: record.count,
+    //     courses:{user}
+    // })
+  
+    } catch (err) {
+        console.log(err);
+        
+  
+      res.status(500).json({
+  
+        msg: "failed to login",
+  
+        route: "/login",
+  
+      });
+  
+    }
+  
   }
 
   
@@ -114,3 +164,11 @@ export async function getUsers(req:Request, res:Response, next:NextFunction){
     }
   }
 
+export async function logOut(req:Request, res:Response) {
+
+    res.clearCookie('mytoken')
+    // res.status(200).json({
+    //     message: You have succesfully logged out
+    // })
+    res.redirect('/')
+}

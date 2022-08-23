@@ -12,24 +12,27 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <title>Document</title>
+    <title>Login</title>
 </head>
 <body>
-    <div id="login_table">
+
+    <form id="login_table" action="/users/login" method="post">
+  <div id = "login_error" class="text-center mb-2 text-danger text-bold"></div>
+
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text"><i class="fas fa-user"></i></span>
           </div>
-          <input type="text" class="form-control" id="username" placeholder="Fullname" aria-label="Username" aria-describedby="basic-addon1">
+          <input type="text" class="form-control" id="username" placeholder="Email" aria-label="email" aria-describedby="basic-addon1" name="email" required>
         </div>
         <div class="input-group mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text"><i class="fas fa-lock-open"></i></span>
           </div>
-          <input type="password" class="form-control" id="password" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
+          <input type="password" class="form-control" id="password" placeholder="Password" aria-label="password" aria-describedby="basic-addon1" name ="password" required>
         </div>
-      <button id="login" class="btn btn-dark btn-lg btn-block">LOGIN</button>
-    </div>
+      <button type= "submit" id="login" class="btn btn-dark btn-lg btn-block">LOGIN</button>
+    </form>
 
     <div id="myModal" class="modal">
         <div class="modal-content">
@@ -39,3 +42,33 @@
     </div>
 </body>
 </html>
+<script>
+  // const login_form = document.querySelector("#login_table")
+  // const login_error = document.querySelector('#login_error')
+  // login_form.addEventListener('submit', async(e)=>{
+  //   e.preventDefault()
+  //   // const fd = new FormData()
+  //   const form_data = {
+  //     email: login_form.email.value,
+  //     password: login_form.password.value,
+  // }
+  // axios({
+  //   method: 'post',
+  //     url: '/index/login',
+  //     data: JSON.stringify(form_data),
+  //     headers: {'Content-Type': 'application/json',}
+  //   }).then(response=>{
+      
+  //     if(response.data.message="Login successful"){
+  //         window.location.href = "/dashboard"
+  //     }else{
+  //       login_error.innerHTML = response.data.message
+  //     }
+  //   }).catch(err=>{
+  //     console.log(err.response.data.message);
+  //     login_error.innerHTML = err.response.data.message
+  //   })
+    
+  // })
+</script>
+  <%- include('./footer.ejs') %>

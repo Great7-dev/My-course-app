@@ -1,13 +1,15 @@
 body {
   padding: 100px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: blue;
-  background-image: url("../images/The Most Beautiful Public High School in Every State in America.jpeg");
+  /* background-color: blue; */
+  background-image: url("../images/North Kansas City High School (North Kansas City, Missouri).jpeg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   /* height: 200vh; */
   background-attachment: fixed;
+ 
+
 }
 .container{
   width: 100vw;

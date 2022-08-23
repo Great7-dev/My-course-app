@@ -10,44 +10,82 @@
 </head>
 <body>
     <div id="container">
-        <div class="form-wrap">
+        <form class="form-wrap" id="signup_table">
+            <div id = "signup_error" class="text-center mb-2 text-danger text-bold"></div>
             <h1>Sign Up</h1>
             
 			<div class="form-group">
                 <label for="full-name">Fullname</label>
-				<input type="text" name="fullname" id="full-name" placeholder="Enter your full name">
+				<input type="text" name="fullname" id="full-name" placeholder="Enter your full name" name="fullname" required>
 			</div> <!--/.form-group-->
             
             <div class="form-group">
                 <label for="address">Address</label>
-				<input type="text" name="address" id="address"  placeholder="Enter your address">
+				<input type="text" name="address" id="address"  placeholder="Enter your address" name="address" required>
 			</div> <!--/.form-group-->
             
             <div class="form-group">
                 <label for="phonenumber">Phone number</label>
-                <input type="phonenumber" name="phonenumber" id="phonenumber" placeholder="Enter your phone number">
+                <input type="phonenumber" name="phonenumber" id="phonenumber" placeholder="Enter your phone number" name="phonenumber" required>
           </div><!--/.form-group-->
           
           <div class="form-group">
               <label for="email">Email</label>
-              <input type="email" name="email" id="email"  placeholder="Enter your mail">
+              <input type="email" name="email" id="email"  placeholder="Enter your mail" name="email" required>
 			</div> <!--/.form-group-->
 
       <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" name="password" id="password" placeholder="Enter your password">
+          <input type="password" name="password" id="password" placeholder="Enter your password" name="password" required>
         </div><!--/.form-group-->
         
         
         <div class="form-group">
             <label for="confim_password2">Confirm Password</label>
-            <input type="password" name="password2" id="password2" placeholder="Enter your password again">
+            <input type="password" name="password2" id="password2" placeholder="Enter your password again" name="confirm_password" required>
         </div><!--/.form-group-->
         
-        <button type="submit"  class="btn">Sign Up</button>
+        <button type="submit"  class="btn" id="signup">Sign Up</button>
         <p class="bottom-text">By Clicking the sign up button, you agree to our</p>
         <a href="#">Terms & Conditions</a>
         <a href="#">Privacy Policy</a>
+        </form>
     </div>
 </body>
 </html>
+
+<script>
+    const signup_form = document.querySelector("#signup_table")
+    const signup_error = document.querySelector('#signup_error')
+    signup_form.addEventListener('submit', async(e)=>{
+      e.preventDefault()
+      // const fd = new FormData()
+      console.log(signup_form);
+      const form_data = {
+        fullname: signup_form.fullname.value,
+        address: signup_form.address.value,
+        phonenumber: signup_form.phonenumber.value,
+        email: signup_form.email.value,
+        password: signup_form.password.value,
+        confirm_password: signup_form.password2.value
+    }
+    axios({
+      method: 'post',
+        url: '/index/register',
+        data: JSON.stringify(form_data),
+        headers: {'Content-Type': 'application/json',}
+      }).then(response=>{
+        
+        if(response.data.message="You have successfully sign up"){
+            window.location.href = "/login"
+        }else{
+          signup_error.innerHTML = response.data.message
+        }
+      }).catch(err=>{
+        console.log(err.response.data.message);
+        signup_error.innerHTML = err.response.data.message
+      })
+      
+    })
+  </script>
+<%- include('./footer.ejs') %>
