@@ -37,12 +37,14 @@ export async function RegisterUser(req:Request, res:Response, next:NextFunction)
             phonenumber:req.body.phonenumber,
             password:passwordHash
          })
-        res.status(201);
-        res.json({
-            message:"You have successfully signed up.",
-            record
-        })
+         res.render('loginrefresh')
+        // res.status(201);
+        // res.json({
+        //     message:"You have successfully signed up.",
+        //     record
+        // })
     }catch(err){
+        console.log(err)
         res.status(500).json({
             message:'failed to register',
             route:'/register'
@@ -74,12 +76,12 @@ export async function RegisterUser(req:Request, res:Response, next:NextFunction)
          })
        }
        if(validUser){
-        res.render('loginrefresh')
-    //    res.status(200)
-    //    res.json({message: "login successful",
-    //       token,
-    //       user   
-    //      })
+        // res.render('loginrefresh')
+       res.status(200)
+       res.json({message: "login successful",
+          token,
+          user   
+         })
        }
     }catch(err){
         res.status(500)

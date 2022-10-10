@@ -8,7 +8,7 @@ import { auth } from "../Middleware/auth";
 /* GET users listing. */
 router.post('/create',auth, Users);
 router.post("/login",LoginUser)
-router.get('/dashboard',defaultView)
+router.get('/dashboard', auth, defaultView)
 router.get('/read', getCourses);
 router.get('/read/:id', getOne);
 router.patch('/update/:id',auth, UpdateCourses);

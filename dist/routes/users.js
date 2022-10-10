@@ -11,7 +11,7 @@ const auth_1 = require("../Middleware/auth");
 /* GET users listing. */
 router.post('/create', auth_1.auth, courseController_1.Users);
 router.post("/login", usercontroller_1.LoginUser);
-router.get('/dashboard', usercontroller_1.defaultView);
+router.get('/dashboard', auth_1.auth, usercontroller_1.defaultView);
 router.get('/read', courseController_1.getCourses);
 router.get('/read/:id', courseController_1.getOne);
 router.patch('/update/:id', auth_1.auth, courseController_1.UpdateCourses);
